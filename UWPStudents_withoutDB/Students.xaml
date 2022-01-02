@@ -1,0 +1,105 @@
+﻿<Page
+    x:Class="UWPStudents_withoutDB.Students"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPStudents_withoutDB"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="H1">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="FontSize" Value="16"></Setter>
+            <Setter Property="FontWeight" Value="SemiBold"></Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="Margin" Value="5"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+            <Setter Property="Width" Value="100"></Setter>
+        </Style>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <local:VM_Student x:Name="VM"></local:VM_Student>
+    </Page.DataContext>
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="350"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel  Grid.Column="0">
+                <TextBlock Text="Студенты" Style="{StaticResource H1}"></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Width="30" Text="ID"></TextBlock>
+                    <TextBlock Width="190" Text="ФИО"></TextBlock>
+                    <TextBlock Width="140" Text="Группа"></TextBlock>
+                    <TextBlock Width="90" Text="Доход"></TextBlock>
+                    <TextBlock Width="100" Text="Средний балл"></TextBlock>
+                    
+                </StackPanel>
+                <ListBox ItemsSource="{Binding Students}" 
+                         SelectedItem="{Binding SelectedStudent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Width="30" Text="{Binding Id}"></TextBlock>
+                                <TextBlock Width="200" Text="{Binding Fio}"></TextBlock>
+                                <TextBlock Width="150" Text="{Binding Group.Name}"></TextBlock>
+                                <TextBlock Width="100" Text="{Binding Income}"></TextBlock>
+                                <TextBlock Width="100" Text="{Binding Score}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+            <StackPanel Grid.Column="1" >
+                <TextBlock Text="Панель изменения" Style="{StaticResource H1}"></TextBlock>
+
+                <StackPanel DataContext="{Binding SelectedStudent}">
+                    <TextBlock Text="ФИО"></TextBlock>
+                    <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Text="Средний балл"></TextBlock>
+                    <TextBox Text="{Binding Score, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Slider Value="{ Binding Score, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Minimum="5" Maximum="100"
+                            ></Slider>
+                    <TextBlock Text="Доход на члена семьи"></TextBlock>
+                    <TextBox Text="{Binding Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Slider Value="{ Binding Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Minimum="1000" Maximum="500000"
+                            ></Slider>
+                    <TextBlock Text="Группа"></TextBlock>
+                    <!--<TextBox Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>-->
+                </StackPanel>
+                <ComboBox ItemsSource="{Binding Students.Groups, UpdateSourceTrigger=PropertyChanged}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedStudent.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ></ComboBox>
+
+                <Button Content="Добавление" Command="{Binding Add }"></Button>
+                <Button Content="Удаление" Command="{Binding Del }"></Button>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Page>
